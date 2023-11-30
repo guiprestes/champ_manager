@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <h1>Controle de Torneio</h1>
+</head>
+<body>
+  <h2>Jogadores</h2>
+  <ul>
+    {% for player in players %}
+      <li>
+        <a href="{{ url_for('remove_player', id=player.id) }}">{{ player.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  <form action="{{ url_for('add_player') }}" method="post">
+    <input type="text" name="name" placeholder="Nome do Jogador" required>
+    <button type="submit">Adicionar Jogador</button>
+  </form>
+
+  <h2>Partidas</h2>
+  <ul>
+    {% for match in matches %}
+      <li>
+        <a href="{{ url_for('remove_match', id=match.id) }}">
+            {{ match.player_1 }} vs {{ match.player_2 }} - Vencedor: {{ match.winner_id }} - Pts: {{ match.points_won }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  <form action="{{ url_for('add_match') }}" method="post">
+    <select name="player1" required>
+      {% for player in players %}
+        <option value="{{ player.id }}">{{ player.name }}</option>
+      {% endfor %}
+    </select>
+    <select name="player2" required>
+      {% for player in players %}
+        <option value="{{ player.id }}">{{ player.name }}</option>
+      {% endfor %}
+      </select>
+      <select name="winner" required>
+          <option value="" selected disabled>Selecione o Vencedor</option>
+          {% for player in players %}
+            <option value="{{ player.id }}">{{ player.name }}</option>
+          {% endfor %}
+      </select>
+      <input type="text" name="points" placeholder="Pontuação Vencedor" required>
+      <button type="submit">Registrar Partida</button>
+  </form>
+  <p></p>
+  <form action="{{ url_for('update_score') }}" method="get">
+    <button type="submit">Ver Clasificação</button>
+  </form>
+
+</body>
+</html>
